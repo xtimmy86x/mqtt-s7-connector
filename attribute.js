@@ -129,7 +129,7 @@ module.exports = class attribute {
 				this.last_update = now;
 
 				this.mqtt_handler.publish(this.full_mqtt_topic, data.toString(), {
-					retain: false
+					retain: this.retain_messages
 				});
 
 				if (this.write_back) {

@@ -28,6 +28,9 @@ module.exports = class attribute {
 		// TODO
 		this.round_value = true;
 
+		// attribute retain messages
+		this.retain_messages = retain_messages;
+		
 		// attribute name (last part in topic)
 		this.name = name;
 

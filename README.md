@@ -23,8 +23,12 @@ The configuration file has to be located in the same directory as the installati
 
 __An example of a correct configuration file is found in [```config.example.json```](https://github.com/timroemisch/mqtt-s7-connector/blob/master/config.example.json).__
 
-The config file has to be valid JSON (You can check [here](https://jsonformatter.curiousconcept.com/) if it´s correct)  
-and is separated in 3 sections:
+The config file has to be valid JSON (You can check [here](https://jsonformatter.curiousconcept.com/) if it´s correct)
+and may include optional top-level settings such as:
+
+* `retain_messages` - publish MQTT updates with the retain flag (`false` by default)
+
+It is separated in 3 sections:
 
 * plc:  
 > __general setup of the connection to the plc__  

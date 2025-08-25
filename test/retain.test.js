@@ -1,3 +1,4 @@
+const test = require('node:test');
 const assert = require('assert');
 const Attribute = require('../attribute.js');
 const deviceFactory = require('../deviceFactory.js');
@@ -17,7 +18,7 @@ function createMocks() {
   };
 }
 
-function testAttributeRetainTrue() {
+test('attribute publishes with retain', () => {
   const { mqtt, plc } = createMocks();
   let call;
   mqtt.publish = (topic, message, options) => {
@@ -30,9 +31,9 @@ function testAttributeRetainTrue() {
     message: 'true',
     options: { retain: true }
   });
-}
+});
 
-function testAttributeRetainFalse() {
+test('attribute publishes without retain', () => {
   const { mqtt, plc } = createMocks();
   let call;
   mqtt.publish = (topic, message, options) => {
@@ -45,36 +46,12 @@ function testAttributeRetainFalse() {
     message: 'true',
     options: { retain: false }
   });
-}
+});
 
-function testDeviceFactoryPropagation() {
+test('deviceFactory propagates retain flag', () => {
   const { mqtt, plc } = createMocks();
   const config = { type: 'sensor', name: 'Temp', state: { plc: 'DB1,REAL0' } };
   const devices = {};
   const dev = deviceFactory(devices, plc, mqtt, config, 'base', true);
   assert.strictEqual(dev.attributes.state.retain_messages, true);
-}
-
-const tests = [
-  ['attribute publishes with retain', testAttributeRetainTrue],
-  ['attribute publishes without retain', testAttributeRetainFalse],
-  ['deviceFactory propagates retain flag', testDeviceFactoryPropagation]
-];
-
-let failed = false;
-for (const [name, fn] of tests) {
-  try {
-    fn();
-    console.log(`✓ ${name}`);
-  } catch (err) {
-    failed = true;
-    console.error(`✗ ${name}`);
-    console.error(err);
-  }
-}
-
-if (failed) {
-  process.exit(1);
-} else {
-  console.log('All tests passed');
-}
+});

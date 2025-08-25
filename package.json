@@ -15,7 +15,7 @@
     "s7-mqtt-connector": "index.js"
   },
   "scripts": {
-    "test": "node test/retain.test.js",
+    "test": "node --test",
     "start": "node index.js"
   },
   "author": "timroemisch https://github.com/timroemisch",

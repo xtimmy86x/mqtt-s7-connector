@@ -1,9 +1,9 @@
 let sf = require("./service_functions.js");
 
 module.exports = class attribute {
-	constructor(plc, mqtt, name, type, mqtt_device_topic) {
-		this.plc_handler = plc;
-		this.mqtt_handler = mqtt;
+        constructor(plc, mqtt, name, type, mqtt_device_topic, retain_messages = false) {
+                this.plc_handler = plc;
+                this.mqtt_handler = mqtt;
 
 		this.last_update = 0;
 		this.last_value = 0;
@@ -38,8 +38,11 @@ module.exports = class attribute {
 		// full topic
 		this.full_mqtt_topic = mqtt_device_topic + "/" + this.name;
 
-		// optional write back changes from plc to set_plc
-		this.write_back = false;
+                // optional write back changes from plc to set_plc
+                this.write_back = false;
+
+                // set retain option for mqtt messages
+                this.retain_messages = retain_messages;
 
 		// only subscribe if attribute is allowed to write to plc
 		if (this.write_to_s7) {
@@ -128,9 +131,9 @@ module.exports = class attribute {
 				this.last_value = data;
 				this.last_update = now;
 
-				this.mqtt_handler.publish(this.full_mqtt_topic, data.toString(), {
-					retain: false
-				});
+                                this.mqtt_handler.publish(this.full_mqtt_topic, data.toString(), {
+                                        retain: this.retain_messages
+                                });
 
 				if (this.write_back) {
 					if (data == this.last_set_data) {

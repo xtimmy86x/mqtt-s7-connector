@@ -42,7 +42,8 @@ module.exports = class attribute {
                 this.write_back = false;
 
                 // set retain option for mqtt messages
-                this.retain_messages = retain_messages;
+                // normalize to boolean to avoid undefined or null values
+                this.retain_messages = Boolean(retain_messages);
 
 		// only subscribe if attribute is allowed to write to plc
 		if (this.write_to_s7) {

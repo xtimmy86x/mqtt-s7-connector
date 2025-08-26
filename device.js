@@ -2,16 +2,19 @@ let attribute = require("./attribute.js");
 let sf = require('./service_functions.js');
 
 module.exports = class device {
-	constructor(plc, mqtt, config) {
-		this.plc_handler = plc;
-		this.mqtt_handler = mqtt;
+        constructor(plc, mqtt, config) {
+                this.plc_handler = plc;
+                this.mqtt_handler = mqtt;
 
-		this.name = config.name || "unnamed device";
-		this.config = config;
+                this.name = config.name || "unnamed device";
+                this.config = config;
 
-		this.discovery_topic = "homeassistant";
-		this.discovery_retain = false;
-		this.type = config.type.toLowerCase();
+                this.discovery_topic = "homeassistant";
+                this.discovery_retain = false;
+                this.type = config.type.toLowerCase();
+
+                // retain option for mqtt messages
+                this.retain_messages = config.retain_messages || false;
 
 		// device topics
 		this.mqtt_name = config.mqtt;
@@ -23,12 +26,13 @@ module.exports = class device {
 
 	create_attribute(config, required_type, name) {
 		// create attribute object
-		let new_attribute = new attribute(
-			this.plc_handler,
-			this.mqtt_handler,
-			name,
-			required_type,
-			this.full_mqtt_topic);
+                let new_attribute = new attribute(
+                        this.plc_handler,
+                        this.mqtt_handler,
+                        name,
+                        required_type,
+                        this.full_mqtt_topic,
+                        this.retain_messages);
 
 		// the config could be an object
 		// or simply an string

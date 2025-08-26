@@ -9,7 +9,7 @@ let dev_switch = require('./devices/switch.js');
 let dev_climate = require('./devices/climate.js');
 let dev_binCover = require('./devices/binaryCover.js');
 
-module.exports = function deviceFactory(devices, plc, mqtt, config, mqtt_base) {
+module.exports = function deviceFactory(devices, plc, mqtt, config, mqtt_base, retain_messages) {
 	let type = config.type.toLowerCase();
 
 	// check name
@@ -37,9 +37,10 @@ module.exports = function deviceFactory(devices, plc, mqtt, config, mqtt_base) {
 	// save new values back to config
 	// so it can be processed in the new object
 	mqtt_name = new_mqtt_name;
-	config.name = name;
-	config.mqtt = new_mqtt_name;
-	config.mqtt_base = mqtt_base;
+        config.name = name;
+        config.mqtt = new_mqtt_name;
+        config.mqtt_base = mqtt_base;
+        config.retain_messages = retain_messages;
 
 	switch (type) {
 		case "light":
